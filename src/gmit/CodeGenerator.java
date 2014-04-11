@@ -21,7 +21,6 @@ public class CodeGenerator {
 	private CodeBook coder = new CodeBook(); // we can serialize this object
 	private DecodeBook decoder = new DecodeBook(); // we can serialize this object
 	private FileParser parser = new FileParser();
-	// code writer? then add encoder and decoder, first get this working
 	private CodeWriter writer = new CodeWriter();
 	private FileDecoder fileDecoder = new FileDecoder();
 	// SaveCodeBook
@@ -30,17 +29,12 @@ public class CodeGenerator {
 	private Random random = new Random(); // seeds from time automatically (uses System.currtime.millis)
 	private static final int MAX_RANGE = 75000;
 	private Set<Integer> used = new HashSet<Integer>();
-	
-	// debug
-	private int totalNumCount, wordNew, wordAdd;
+	private int numCount;
 	
 	// the following method generates the initial 900 word codeBook, and the initial 75000 number decodeBook
 	// more words/numbers can be added to the codeBooks when reading in a file
 	public void generateCodeBooks(String wordFile) throws Exception{
 		Collection<String> words = parser.parse(wordFile); // now we have a collection of words
-		// HashSet quicker than TreeSet
-		// add to a set, returns false if already there
-		// numbers == unique hashcodes, constant time, minimum collisions
 		
 		int count = 0;
 		
@@ -60,72 +54,20 @@ public class CodeGenerator {
 					unique = used.add(next);
 				}while(unique == false);
 				
-				totalNumCount++;
+				numCount++;
 				coder.addCode(word, next);
 				decoder.addCode(next, word);
 			} // while
 		} // for
-		System.out.println("\nTotal initial codeBook num count: " + totalNumCount);
+		System.out.printf("\n%d numbers added to %d words in the initial codeBook generation.\n", numCount, count);
 	}
 	
 	public void encodeFile(String wordFile) throws Exception{
-		Collection<String> words = parser.parse(wordFile);
-		List<Integer> encodedWords = new ArrayList<Integer>();
-		
-		for(String word : words){
-			Set<Integer> codes = coder.getCodes(word);
-			
-			if(codes == null){ // if word is not in codeBook then add it (6 digits for new word, 30 different codes to each new word)
-				int next = 0;
-				for(int i = 0; i < 30; i++){
-					boolean unique;
-					
-					do{
-						next = random.nextInt(1000000 - 100000) + 100000; // make sure it's 6 digits
-						unique = used.add(next);
-					}while(unique == false);
-					
-					totalNumCount++;
-					coder.addCode(word, next);
-					decoder.addCode(next, word);
-					
-				} // for
-				
-				wordNew++;
-				
-				codes = coder.getCodes(word);				
-			}
-			
-			if(codes != null){	// if I have the word in the code book, take a random int from it, then add encoded word to encodedFileList
-				Object[] codeArray = codes.toArray();
-				int size = codeArray.length;
-				int randItem = new Random().nextInt(size);
-				int randCode = (Integer)codeArray[randItem];
-				
-				encodedWords.add(randCode);
-				//decoder.addCode(randCode, word);
-				//System.out.printf("Code: %d\n", randCode);
-				
-				wordAdd++;
-			}
-		} // for
-		
-		writer.saveInt(encodedWords, "encodedFile.txt");
-		System.out.println("finished writing");
+		FileEncoder.encodeFile(parser, wordFile, decoder, writer, coder, used, random);
 	}
 
 	public void decodeFile(String wordFile) throws Exception{
-		Collection<String> words = parser.parseNum(wordFile);
-		List<String> decodedWords = new ArrayList<String>();
-		
-		for(String word : words){
-			decodedWords.add(decoder.getCode(Integer.parseInt(word)));
-		}
-		
-		writer.saveStr(decodedWords, "decodedFile.txt");
-		System.out.println("finished decoding");
-		
-		System.out.printf("\n\nTotal Words: %d\nWords added to codeBooks: %d\nTotal Numbers: %d\n",wordAdd, wordNew, totalNumCount);
+		fileDecoder.decodeFile(parser, wordFile, decoder, writer);
 	}
 	
 	public CodeBook getCodeBook(){
