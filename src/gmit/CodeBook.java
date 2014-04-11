@@ -1,48 +1,41 @@
 package gmit;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
-/*
- * This class is Serializable which means it can be written as an object to a file, then it's state can be loaded later
- * it takes in a word and a number, 
+/* this class contains the codeBook map and has some very important basic methods
+ * this class is also Serializable which means it can be written as an object to be loaded later
  */
 
 public class CodeBook implements Serializable{
-	private Map<String, Set<Integer>> coder = new HashMap<String, Set<Integer>>(); // string from fileParser class // HashMap gives average constant time with collosiong, TreeMap LogN time gauranteed, default HashMap
-	// maps in the exam, HASHMAP == average constant time
-	// treeMap = Log(n) , HashMap better
-	// study Big O, times
-	
-	// should run in under 1 second.
-	// not our job to encode
-	
-	// codeGen job to call this
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6886360696907287612L;
+	private Map<String, List<Integer>> coder = new HashMap<String, List<Integer>>();
+
 	public void addCode(String word, int number){
-		Set<Integer> numbers = coder.get(word); //coder == map
-		
+		List<Integer> numbers = coder.get(word);
+
 		if(numbers == null){
-			numbers = new TreeSet<Integer>();
+			numbers = new ArrayList<Integer>();
 		}
-		numbers.add(number); // add one int
+		numbers.add(number);
 		coder.put(word, numbers);
-		// hash set uses a hashmap, tree set uses a tree 
-		// hash constant, tree logN
 	}
-	
-	public Set<Integer> getCodes(String word){
+
+	public List<Integer> getCodes(String word){
 		return coder.get(word);
 	}
-	
+
 	public void delete(String word){
 		coder.remove(word);
 	}
-	
+
 	public int size(){
 		return coder.size();
 	}
-	
 }

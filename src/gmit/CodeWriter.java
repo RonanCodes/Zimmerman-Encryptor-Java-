@@ -2,11 +2,8 @@ package gmit;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.OutputStreamWriter;
 import java.util.List;
-import java.util.Set;
 
 /*
  * This class takes in a set of integers and a fileName,
@@ -15,17 +12,16 @@ import java.util.Set;
  */
 
 public class CodeWriter {
-	public void saveInt(List<Integer> codes, String file) throws Exception{		// could pass it in a socket stream
+	public void saveInt(List<Integer> codes, String file) throws Exception{
 		if(codes == null || codes.size() == 0){
 			throw new Exception("Yikes....");
 		}
+		
 		BufferedWriter out = new BufferedWriter(new FileWriter(new File(file)));
-		// buffered writer is more efficient
 
 		int counter = 1;
 
 		for(Integer i : codes){
-			//System.out.println(i);
 			out.write(i + "");
 
 			if(counter % 10 == 0){
@@ -34,7 +30,7 @@ public class CodeWriter {
 			else{
 				out.write(" ");
 			}
-
+			
 			counter++;
 		}
 
@@ -42,14 +38,12 @@ public class CodeWriter {
 		out.close();
 	} // save
 
-	public void saveStr(List<String> codes, String file) throws Exception{		// could pass it in a socket stream
+	public void saveStr(List<String> codes, String file) throws Exception{
 		if(codes == null || codes.size() == 0){
 			throw new Exception("Yikes....");
 		}
-		
-		BufferedWriter out = new BufferedWriter(new FileWriter(new File(file)));
-		// buffered writer is more efficient
 
+		BufferedWriter out = new BufferedWriter(new FileWriter(new File(file)));
 		int counter = 1;
 
 		for(String i : codes){
@@ -65,7 +59,7 @@ public class CodeWriter {
 			}
 
 			counter++;
-		}
+		} // for
 
 		out.flush();
 		out.close();
