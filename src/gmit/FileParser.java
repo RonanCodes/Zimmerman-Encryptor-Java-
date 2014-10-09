@@ -15,6 +15,7 @@ public class FileParser {
 	private static final int CHAR_MIN = 97; // lower case a
 	private static final int CHAR_MAX = 122; // lower case z
 
+	// O(N^3) - a for loop is called on each line read, this for loop calls the process method which contains a for loop
 	public Collection<String> parseStr (String file) throws Exception{
 		Collection<String> col = new ArrayList<String>();
 		String line = null;

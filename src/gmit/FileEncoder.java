@@ -14,6 +14,7 @@ import java.util.Random;
 import java.util.Set;
 
 public class FileEncoder {
+	// O(N^2) - must iterate through each element, possibly O(N^3) if many unique numbers are taken
 	public static void encodeFile(FileParser parser, String wordFile, DecodeBook decoder, CodeWriter writer, CodeBook coder, Set<Integer> used, Random random) throws Exception {
 		Collection<String> words = parser.parseStr(wordFile);
 		List<Integer> encodedWords = new ArrayList<Integer>();

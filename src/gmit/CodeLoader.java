@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 public class CodeLoader {
+	// O(n) - Must iterate through each element
 	public CodeBook loadCodeBook() throws ClassNotFoundException, IOException{
 		@SuppressWarnings("resource")
 		ObjectInputStream reader = new ObjectInputStream(new FileInputStream("CodeBookSer"));
@@ -14,7 +15,8 @@ public class CodeLoader {
 
 		return coder;
 	}
-
+	
+	// O(n) - Must iterate through each element
 	public DecodeBook loadDecodeBook() throws ClassNotFoundException, IOException{
 		@SuppressWarnings("resource")
 		ObjectInputStream reader = new ObjectInputStream(new FileInputStream("DecodeBookSer"));

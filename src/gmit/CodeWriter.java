@@ -12,6 +12,7 @@ import java.util.List;
  */
 
 public class CodeWriter {
+	// O(N) - must iterate through each element
 	public void saveInt(List<Integer> codes, String file) throws Exception{
 		if(codes == null || codes.size() == 0){
 			throw new Exception("Yikes....");
@@ -38,6 +39,7 @@ public class CodeWriter {
 		out.close();
 	} // save
 
+	// O(N) - must iterate through each element
 	public void saveStr(List<String> codes, String file) throws Exception{
 		if(codes == null || codes.size() == 0){
 			throw new Exception("Yikes....");

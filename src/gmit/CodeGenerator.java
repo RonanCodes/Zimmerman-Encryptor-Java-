@@ -26,6 +26,8 @@ public class CodeGenerator {
 
 	// the following method generates the initial 900 word codeBook, and the initial 75000 number decodeBook
 	// more words/numbers can be added to the codeBooks when reading in a file
+	
+	// O(N^2) possibly O(N^3) if all the random numbers were being used up, unlikely
 	public void generateCodeBooks(String wordFile) throws Exception{
 		Collection<String> words = parser.parseStr(wordFile); // now we have a collection of words
 
@@ -55,22 +57,27 @@ public class CodeGenerator {
 		System.out.printf("\n%d numbers added to %d words in the initial codeBook generation.\n", numCount, count);
 	} // generateCodeBooks
 
+	// O(N^2) - must iterate through each element, possibly O(N^3) if many unique numbers are taken
 	public void encodeFile(String wordFile) throws Exception{
 		FileEncoder.encodeFile(parser, wordFile, decoder, writer, coder, used, random);
 	}
 
+	// O(N) - must iterate through each element
 	public void decodeFile() throws Exception{
 		fileDecoder.decodeFile(parser, decoder, writer);
 	}
 
+	// Average O(1), Maximum O(n)
 	public CodeBook getCodeBook(){
 		return this.coder;
 	}
-
+	
+	// Average O(1), Maximum O(n)
 	public DecodeBook getDecodeBook(){
 		return this.decoder;
 	}
 
+	// O(1) - constant/ linear time (no looping/iterations)
 	public int computeFreq(int count){
 		int freq = 0;
 
@@ -90,6 +97,7 @@ public class CodeGenerator {
 		return freq;
 	} // computeFreq
 
+	// O(n) - Must iterate through each element
 	public void saveCodeBooks(){
 		try {
 			saver.saveCodeBook(coder);
@@ -106,6 +114,7 @@ public class CodeGenerator {
 		}
 	} // saveCodeBooks
 
+	// O(n) - Must iterate through each element
 	public void loadCodeBooks(){
 		try {
 			coder = loader.loadCodeBook();

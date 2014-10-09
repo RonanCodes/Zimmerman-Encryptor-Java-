@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class FileDecoder {
+	// O(N) - must iterate through each element
 	public void decodeFile(FileParser parser, DecodeBook decoder, CodeWriter writer) throws Exception{
 		String fileToDecode = "encodedFile.txt";
 
